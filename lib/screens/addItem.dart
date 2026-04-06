@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../model/itemModel.dart';
 
 class AddItem extends StatefulWidget {
     const AddItem({super.key});
@@ -8,6 +9,9 @@ class AddItem extends StatefulWidget {
 }
 
 class _AddItemState extends State<AddItem> {
+    // connect to service model created
+    final FirestoreService firestoreService = Service();
+
     final _formKey = GlobalKey<FormState>();
     
     // 📝 Controllers to track what the user types
@@ -27,7 +31,8 @@ class _AddItemState extends State<AddItem> {
     }
     
     
-    void _submitItem() {
+    void _addItem(Item item) async {
+        await firestoreService.addItem(item);
         print('new Item created');
     }
 
@@ -124,8 +129,18 @@ class _AddItemState extends State<AddItem> {
                 ElevatedButton(
                     onPressed: () {
                     if (_formKey.currentState!.validate()) { 
+                        double parsePrice = double.tryParse(_priceController.text);
+
+                        // create new Item model to send to firebase
+                        final newItem = Item(
+                            name: _nameController.text,
+                            desc: _descController.text,
+                            imageUrl: _imageController.text,
+                            price: parsePrice,
+                        );
+
                         _resetForm();
-                        _submitItem();
+                        _addItem(item);
                         }
                     },
                     style: ElevatedButton.styleFrom(
