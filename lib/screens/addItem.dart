@@ -1,0 +1,146 @@
+import 'package:flutter/material.dart';
+
+class AddItem extends StatefulWidget {
+    const AddItem({super.key});
+
+    @override
+    State<AddItem> createState() => _AddItemState();
+}
+
+class _AddItemState extends State<AddItem> {
+    final _formKey = GlobalKey<FormState>();
+    
+    // 📝 Controllers to track what the user types
+    final TextEditingController _nameController = TextEditingController();
+    final TextEditingController _descController = TextEditingController();
+    final TextEditingController _imageController = TextEditingController();
+    final TextEditingController _priceController = TextEditingController();
+
+    // clear all fields after successful submission
+    void _resetForm() {
+        setState(() {
+            _nameController.text = '';
+            _descController.text = '';
+            _imageController.text = '';
+            _priceController.text = '';
+        });
+    }
+    
+    
+    void _submitItem() {
+        print('new Item created');
+    }
+
+
+    @override
+    void dispose() {
+        _nameController.dispose();
+        _descController.dispose();
+        _imageController.dispose();
+        _priceController.dispose();
+        super.dispose();
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+        body: Padding(
+            padding: const EdgeInsets.all(16.0), 
+            child: Form( // 👶 Child
+            key: _formKey,
+            child: Column(
+                children: [
+                const Text(
+                    'Add Item',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                
+                // ITEM NAME
+                TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                        labelText: 'Item Name',
+                        border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                    if (value == null || value.isEmpty) {
+                        return 'Please enter a name for the item'; 
+                    }
+                        return null;
+                    },
+                ),
+                const SizedBox(height: 16),
+                
+                // Desc Field
+                TextFormField(
+                    controller: _descController,
+                    decoration: const InputDecoration(
+                        labelText: 'Item description ...',
+                        border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                    if (value == null || value.isEmpty) {
+                        return 'Please add a description for your item';
+                    }
+                        return null;
+                    },
+                ),
+                const SizedBox(height: 16),
+                
+                // Image
+                TextFormField(
+                    controller: _imageController,
+                    decoration: InputDecoration(
+                        labelText: 'Add image URL here',
+                        border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                    if (value == null || value.isEmpty) {
+                        return 'Please upload a valid image URL'; 
+                    }
+                        return null;
+                    },
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                    controller: _priceController,
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(
+                        labelText: 'Enter item price',
+                        border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                        if ( value == null  || value == 0 ) {
+                            return 'Price is required';
+                        }
+                        return null;
+                    }
+                ),
+                const SizedBox(height: 24),
+                
+                //  Sign Up Button
+                ElevatedButton(
+                    onPressed: () {
+                    if (_formKey.currentState!.validate()) { 
+                        _resetForm();
+                        _submitItem();
+                        }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                    ),
+                    child: const Text(
+                        'Add Item',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
