@@ -2,7 +2,7 @@ class Item {
   final String name;
   final String desc;
   final String imageUrl;
-  final int price;                 
+  final double price;                 
 
   Item({ 
     required this.name,
@@ -36,7 +36,7 @@ class Item {
     String? name,
     String? imageUrl, 
     String? desc,
-    int? price,                  
+    double? price,                  
   }) {
     return Item(
       name: name ?? this.name,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../firestoneService.dart';
 import '../model/itemModel.dart';
 
 class AddItem extends StatefulWidget {
@@ -9,12 +10,10 @@ class AddItem extends StatefulWidget {
 }
 
 class _AddItemState extends State<AddItem> {
-    // connect to service model created
-    final FirestoreService firestoreService = Service();
+    final Service _service = Service();
 
     final _formKey = GlobalKey<FormState>();
     
-    // 📝 Controllers to track what the user types
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _descController = TextEditingController();
     final TextEditingController _imageController = TextEditingController();
@@ -30,9 +29,8 @@ class _AddItemState extends State<AddItem> {
         });
     }
     
-    
     void _addItem(Item item) async {
-        await firestoreService.addItem(item);
+        await _service.addItem(item);
         print('new Item created');
     }
 
@@ -51,7 +49,7 @@ class _AddItemState extends State<AddItem> {
         return Scaffold(
         body: Padding(
             padding: const EdgeInsets.all(16.0), 
-            child: Form( // 👶 Child
+            child: Form(
             key: _formKey,
             child: Column(
                 children: [
@@ -117,8 +115,8 @@ class _AddItemState extends State<AddItem> {
                         border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                        if ( value == null  || value == 0 ) {
-                            return 'Price is required';
+                        if (value == null || value.isEmpty) {
+                            return 'Please enter a price';
                         }
                         return null;
                     }
@@ -129,7 +127,7 @@ class _AddItemState extends State<AddItem> {
                 ElevatedButton(
                     onPressed: () {
                     if (_formKey.currentState!.validate()) { 
-                        double parsePrice = double.tryParse(_priceController.text);
+                        double parsePrice = double.parse(_priceController.text);
 
                         // create new Item model to send to firebase
                         final newItem = Item(
@@ -140,7 +138,7 @@ class _AddItemState extends State<AddItem> {
                         );
 
                         _resetForm();
-                        _addItem(item);
+                        _addItem(newItem);
                         }
                     },
                     style: ElevatedButton.styleFrom(

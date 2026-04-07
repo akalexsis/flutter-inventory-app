@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Inventory App',
+      debugShowCheckedModeBanner: false,
       home: AddItem(),
     );
   }
