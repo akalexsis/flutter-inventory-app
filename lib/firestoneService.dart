@@ -10,9 +10,15 @@ class Service{
         await _products.add(item.toMap());
     }
 
-    // Stream<List<Item>> streamItems() {
-    //   return itemsRef.snapshots().map(
+    Stream<QuerySnapshot> getItems() {
+    //   return _products.snapshots().map(
     //     (snap) => snap.docs.map((d) => Item.fromMap(d.id, d.data())).toList(),
     //   );
-    // }
+
+        return _products.snapshots();
+    }
+
+    Future<void> deleteItem(String itemId) async {
+        await _products.doc(itemId).delete();
+    }
 }

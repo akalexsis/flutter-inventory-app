@@ -31,7 +31,14 @@ class _AddItemState extends State<AddItem> {
     
     void _addItem(Item item) async {
         await _service.addItem(item);
-        print('new Item created');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Item has been created')),
+        );
+
+        Navigator.pop(context);
+        
+        _resetForm();
     }
 
 
@@ -137,7 +144,6 @@ class _AddItemState extends State<AddItem> {
                             price: parsePrice,
                         );
 
-                        _resetForm();
                         _addItem(newItem);
                         }
                     },
